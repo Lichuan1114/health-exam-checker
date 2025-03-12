@@ -1,8 +1,8 @@
 name: Run Health Check Script
 
 on:
-  schedule:
-    - cron: "0 */2 * * *"  # Runs every 2 hour
+  # schedule:
+  #   - cron: "0 */2 * * *"  # Runs every 2 hour
   workflow_dispatch:  # Allows manual execution (optional)
 
 jobs:
@@ -16,8 +16,8 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
-          
+          python-version: "3.x"
+
       - name: Install Google Chrome
         run: |
           sudo apt-get update
@@ -27,8 +27,11 @@ jobs:
 
       - name: Install ChromeDriver
         run: |
+          # Get installed Chrome version
           CHROME_VERSION=$(google-chrome-stable --version | awk '{print $3}' | sed 's/\.[0-9]*$//')
-          wget https://chromedriver.storage.googleapis.com/113.0.5672.63/chromedriver_linux64.zip
+          
+          # Install ChromeDriver that matches Chrome version
+          wget https://chromedriver.storage.googleapis.com/134.0.6998.88/chromedriver_linux64.zip
           unzip chromedriver_linux64.zip
           sudo mv chromedriver /usr/local/bin/
 
@@ -40,3 +43,4 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python health_check_availability.py  
+        
