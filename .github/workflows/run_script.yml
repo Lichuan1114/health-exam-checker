@@ -1,8 +1,8 @@
 name: Run Health Check Script
 
 on:
-  # schedule:
-  #   - cron: "0 */2 * * *"  # Runs every 2 hour
+  schedule:
+    - cron: "0 */2 * * *"  # Runs every 2 hour
   workflow_dispatch:  # Allows manual execution (optional)
 
 jobs:
@@ -17,14 +17,23 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.9"
+          
+      - name: Install Google Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt install -y ./google-chrome-stable_current_amd64.deb
+
+      - name: Install ChromeDriver
+        run: |
+          CHROME_VERSION=$(google-chrome-stable --version | awk '{print $3}' | sed 's/\.[0-9]*$//')
+          wget https://chromedriver.storage.googleapis.com/113.0.5672.63/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/local/bin/
 
       - name: Install Dependencies
-        run: |
-          pip install requests selenium
-          sudo apt update
-          sudo apt install -y chromium-browser chromium-chromedriver
-          echo "CHROME_BIN=$(which chromium-browser)" >> $GITHUB_ENV
-          echo "CHROMEDRIVER_BIN=$(which chromedriver)" >> $GITHUB_ENV
+        run: pip install requests selenium
 
       - name: Run Script
         env:
