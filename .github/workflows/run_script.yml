@@ -1,8 +1,8 @@
 name: Run Health Check Script
 
 on:
-  schedule:
-    - cron: "0 */2 * * *"  # Runs every 2 hour
+  # schedule:
+  #   - cron: "0 */2 * * *"  # Runs every 2 hour
   workflow_dispatch:  # Allows manual execution (optional)
 
 jobs:
