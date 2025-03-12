@@ -3,10 +3,12 @@ name: Run Health Check Script
 on:
   schedule:
     - cron: "*/60 * * * *"  # Runs every 30 minutes
+  workflow_dispatch:  # Allows manual execution (optional)
 
 jobs:
   run-script:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -14,13 +16,18 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.x"
+          python-version: "3.9"
 
       - name: Install Dependencies
-        run: pip install requests selenium
+        run: |
+          pip install requests selenium
+          sudo apt update
+          sudo apt install -y chromium-browser chromium-chromedriver
+          echo "CHROME_BIN=$(which chromium-browser)" >> $GITHUB_ENV
+          echo "CHROMEDRIVER_BIN=$(which chromedriver)" >> $GITHUB_ENV
 
       - name: Run Script
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python your_script.py
+        run: python health_check_availability.py  
