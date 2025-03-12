@@ -113,6 +113,7 @@ def evaluate_slot(location_lst, availability_lst):
     """
     TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
     TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+
     slot_available = False
     current_time = time.strftime("%m-%d %H:%M")
     message = ""
@@ -131,10 +132,10 @@ def evaluate_slot(location_lst, availability_lst):
     
     # Send notification based on availability status
     if slot_available:
-        send_macOS_notification(message, "Health Exam slot detected!")
+        # send_macOS_notification(message, "Health Exam slot detected!")
         send_telegram_notification(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, "Health Exam slot detected!\n" + message)
     else:
-        send_macOS_notification(message, "No Health Exam slot")
+        # send_macOS_notification(message, "No Health Exam slot")
         send_telegram_notification(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, "No Health Exam slot\n" + message)
 
 if __name__ == '__main__':
