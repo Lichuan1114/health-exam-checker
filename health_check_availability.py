@@ -5,8 +5,6 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import os
-import time
-import subprocess
 import requests
 
 def access_data(location, state):
@@ -23,19 +21,13 @@ def access_data(location, state):
     
     # Initialize the Chrome WebDriver and open the health exam booking website
     driver = webdriver.Chrome(options=chrome_options)
-    # driver = webdriver.Chrome()
+    # driver = webdriver.Chrome() # Show browser
     driver.get("https://bmvs.onlineappointmentscheduling.net.au/oasis/Default.aspx")
-    # time.sleep(2) # Allow time for the page to load
     
-    # Click the 'New Individual booking' button - wait until method
+    # Click the 'New Individual booking' button
     WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'New Individual booking')]"))
     ).click()
-    
-    # Click the 'New Individual booking' button
-    # button = driver.find_element(By.XPATH, "//button[contains(., 'New Individual booking')]")
-    # button.click()
-    # time.sleep(2) # Allow time for the page to load
     
     # Find the input field for location and enter the provided location - wait until method
     location_input = WebDriverWait(driver, 10).until(
@@ -43,11 +35,6 @@ def access_data(location, state):
     )
     location_input.clear()
     location_input.send_keys(location)
-    
-    # Find the input field for location and enter the provided location
-    # location_input = driver.find_element(By.XPATH, "//label[contains(., 'City, town, suburb or postcode:')]/following-sibling::input")
-    # location_input.clear()
-    # location_input.send_keys(location)
     
     # Find the state dropdown and select the provided state
     state_dropdown = driver.find_element(By.XPATH, "//label[contains(., 'State:')]/following-sibling::select")
@@ -57,14 +44,12 @@ def access_data(location, state):
     # Click the 'Search' button
     search_button = driver.find_element(By.XPATH, "//input[@value='Search']")
     search_button.click()
-    # time.sleep(3) # Allow time for the page to load
     
     tbody = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, "table.tbl-location[role='presentation'] > tbody"))
     )
     
     # Locate the results table containing locations and availability
-    # tbody = driver.find_element(By.CSS_SELECTOR, "table.tbl-location[role='presentation'] > tbody")
     rows = tbody.find_elements(By.TAG_NAME, "tr")
     location_lst = []  # Stores location names
     availability_lst = []  # Stores availability status
@@ -87,14 +72,6 @@ def access_data(location, state):
     driver.quit()
     evaluate_slot(location_lst, availability_lst)
     
-
-def send_macOS_notification(message, title="Notification"):
-    """
-    Sends a macOS system notification using AppleScript.
-    """
-    script = f'display notification "{message}" with title "{title}"'
-    subprocess.run(["osascript", "-e", script])
-    
 def send_telegram_notification(TOKEN, CHAT_ID, MESSAGE):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     data = {"chat_id": CHAT_ID, "text": MESSAGE}
@@ -115,7 +92,6 @@ def evaluate_slot(location_lst, availability_lst):
     TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
     slot_available = False
-    current_time = time.strftime("%m-%d %H:%M")
     message = ""
     
     # Loop through availability data
@@ -128,14 +104,11 @@ def evaluate_slot(location_lst, availability_lst):
     
     # Format final message with timestamp
     message = message.strip()
-    message = current_time + "\n" + message
     
     # Send notification based on availability status
     if slot_available:
-        # send_macOS_notification(message, "Health Exam slot detected!")
         send_telegram_notification(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, "Health Exam slot detected!\n" + message)
     else:
-        # send_macOS_notification(message, "No Health Exam slot")
         send_telegram_notification(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, "No Health Exam slot\n" + message)
 
 if __name__ == '__main__':
