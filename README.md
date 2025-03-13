@@ -9,7 +9,7 @@ This project is a Python script that automatically checks for health exam appoin
 
 ## 📌 Setup  
 ### Prerequisites
-1️⃣ Make sure you have:  
+1️⃣ Make sure you have:
 - Python 3.x installed
 - Google Chrome installed
 - ChromeDriver installed  
