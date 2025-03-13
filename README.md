@@ -43,6 +43,12 @@ To enable it, push the repository to GitHub and add your Telegram API credential
 - TELEGRAM_BOT_TOKEN
 - TELEGRAM_CHAT_ID
 
+Activate it by enabling the following lines in run_script.yml:
+```bash
+  schedule:
+    - cron: "0 */2 * * *"  # Runs every 2 hours
+```
+
 ## 🛠 How It Works  
 1. Opens the health exam booking website using Selenium
 2. Searches for availability in the specified location & state
