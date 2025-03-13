@@ -37,4 +37,20 @@ TELEGRAM_CHAT_ID=your_chat_id
 python health_check_availability.py
 ```
 
+## ⚙️ GitHub Actions Workflow
+This project includes a GitHub Actions workflow that runs the script automatically every 2 hours.  
+To enable it, push the repository to GitHub and add your Telegram API credentials as GitHub Secrets:
+- TELEGRAM_BOT_TOKEN
+- TELEGRAM_CHAT_ID
+
+## 🛠 How It Works  
+1. Opens the health exam booking website using Selenium
+2. Searches for availability in the specified location & state
+3. Extracts available slots and formats them
+4. Sends a Telegram notification with the results
+
+## 📜 License  
+This project is open-source under the MIT License.
+
+
 
