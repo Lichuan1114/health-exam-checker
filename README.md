@@ -20,4 +20,21 @@ git clone https://github.com/your-username/health-exam-checker.git
 cd health-exam-checker
 ```
 
+3️⃣ Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+4️⃣ Set Up Environment Variables
+Create a .env file in the project directory and add:
+```sh
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+TELEGRAM_CHAT_ID=your_chat_id
+```
+
+5️⃣ Run the Script
+```bash
+python health_check_availability.py
+```
+
 
