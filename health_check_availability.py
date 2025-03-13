@@ -4,6 +4,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from dotenv import load_dotenv
 import os
 import requests
 
@@ -72,9 +73,16 @@ def access_data(location, state):
     driver.quit()
     evaluate_slot(location_lst, availability_lst)
     
-def send_telegram_notification(TOKEN, CHAT_ID, MESSAGE):
-    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-    data = {"chat_id": CHAT_ID, "text": MESSAGE}
+def send_telegram_notification(MESSAGE):
+    # Load environment variables from .env file, if available
+    load_dotenv(override=True)
+    
+    # Read environment variables (for GitHub)
+    TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+    TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+    
+    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+    data = {"chat_id": TELEGRAM_CHAT_ID, "text": MESSAGE}
     
     response = requests.post(url, data=data)
 
@@ -88,9 +96,6 @@ def evaluate_slot(location_lst, availability_lst):
     """
     Evaluates the scraped availability data and sends a notification.
     """
-    TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-    TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
-
     slot_available = False
     message = ""
     
@@ -107,9 +112,9 @@ def evaluate_slot(location_lst, availability_lst):
     
     # Send notification based on availability status
     if slot_available:
-        send_telegram_notification(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, "Health Exam slot detected!\n" + message)
+        send_telegram_notification("Health Exam slot detected!\n" + message)
     else:
-        send_telegram_notification(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, "No Health Exam slot\n" + message)
+        send_telegram_notification("No Health Exam slot\n" + message)
 
 if __name__ == '__main__':
     location = "Adelaide"
