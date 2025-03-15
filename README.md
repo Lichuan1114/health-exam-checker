@@ -4,7 +4,7 @@ This project is a Python script that automatically checks for health exam appoin
 ## 🚀 Features  
 ✅ Automates the booking availability check for health exams  
 ✅ Uses Selenium to scrape the booking website  
-✅ Allows users to enter location and state via command-line arguments or prompt, and save for future use.
+✅ Allows users to enter location and state via command-line arguments or prompt, and save for future use.  
 ✅ Sends notifications via Telegram  
 ✅ Runs on GitHub Actions every 2 hours if enabled  
 
