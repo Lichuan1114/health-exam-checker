@@ -6,7 +6,46 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from dotenv import load_dotenv
 import os
+import sys
 import requests
+
+def load_user_location(arguments):
+    """
+    Determines the location and state to use, either from command-line arguments,
+    a stored file, or user input.
+    """
+    # Define file path for storing the last used location and state
+    location_file_path = os.getcwd() + "/location.txt"
+    
+    # Initialize location and state variables
+    location = ""
+    state = ""
+    
+    # Case 1: No new input provided, use saved location if available
+    if (len(arguments) == 1 and os.path.exists(location_file_path)):
+        with open(location_file_path, "r") as f:
+            location, state = f.read().strip().split(",")
+    
+    # Case 2: User provides new location and state via command-line arguments
+    elif (len(arguments) == 3):
+        location = arguments[1]
+        state = arguments[2]
+        state = state.upper()
+        
+        # Save user input for future runs
+        with open(location_file_path, "w") as f:
+            f.write(location + "," + state)
+            
+    # Case 3: No arguments, no file -> Prompt user for input
+    else:
+        location = input("Enter Location or Postcode (e.g., Adelaide): ")
+        state = input("Enter State Abbr. (e.g., SA): ")
+        
+        # Save user input for future runs
+        with open(location_file_path, "w") as f:
+            f.write(location + "," + state)
+            
+    return location, state
 
 def access_data(location, state):
     """
@@ -117,6 +156,6 @@ def evaluate_slot(location_lst, availability_lst):
         send_telegram_notification("No Health Exam slot\n" + message)
 
 if __name__ == '__main__':
-    location = "Adelaide"
-    state = "SA"
+    arguments = sys.argv
+    location, state = load_user_location(arguments)
     access_data(location, state)
