@@ -64,13 +64,11 @@ Activate it by enabling the following lines in run_script.yml:
 ```
 
 ## 🛠 How It Works  
-1. Opens the health exam booking website using Selenium
-2. Searches for availability in the specified location & state
-3. Extracts available slots and formats them
-4. Sends a Telegram notification with the results
+1. Determines the location and state using command-line arguments, saved data, or manual input.
+2. Opens the health exam booking website using Selenium
+3. Searches for availability in the specified location & state
+4. Extracts available slots and formats them
+5. Sends a Telegram notification with the results
 
 ## 📜 License  
 This project is open-source under the MIT License.
-
-
-
