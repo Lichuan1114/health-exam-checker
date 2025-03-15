@@ -1,9 +1,10 @@
 # 🏥 Health Exam Availability Checker in Australia  
-This project is a Python script that automatically checks for health exam appointment availability and notifies you via Telegram when slots open up in Australia for visa purposes as an individual.
+This project is a Python script that automatically checks for health exam appointment for individual availability and notifies you via Telegram, whether or not slots are available. It can be run manually or scheduled to run at specified intervals using GitHub Actions.
 
 ## 🚀 Features  
 ✅ Automates the booking availability check for health exams  
 ✅ Uses Selenium to scrape the booking website  
+✅ Allows users to enter location and state via command-line arguments or prompt, and save for future use.
 ✅ Sends notifications via Telegram  
 ✅ Runs on GitHub Actions every 2 hours if enabled  
 
@@ -32,9 +33,22 @@ TELEGRAM_BOT_TOKEN=your_telegram_bot_token
 TELEGRAM_CHAT_ID=your_chat_id
 ```
 
-5️⃣ Run the Script
+5️⃣ Run the Script  
+You can run the script in different ways:
+1. Using Saved Location and State
+If you've previously run the script and entered a location, it will use that:
 ```bash
 python health_check_availability.py
+```
+2. Providing Location and State via Command Line
+```bash
+python health_check_availability.py [location] [State Abbreviation]
+```
+3. Entering Location and State Manually
+If no saved location is found and no arguments are provided, the script will prompt you:
+```bash
+Enter Location or Postcode (e.g., Adelaide):
+Enter State Abbr. (e.g., SA):
 ```
 
 ## ⚙️ GitHub Actions Workflow
